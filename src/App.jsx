@@ -16,12 +16,50 @@ const PokemonRow = ({ pokemon, onSelect }) => (
 PokemonRow.propTypes = {
   pokemon: PropTypes.shape({
     name: PropTypes.shape({
-      english: PropTypes.string,
+      english: PropTypes.string.isRequired,
     }),
-    type: PropTypes.arrayOf(PropTypes.string),
+    type: PropTypes.arrayOf(PropTypes.string).isRequired,
   }),
   onSelect: PropTypes.func,
 };
+
+const PokemonInfo = ({ name, type, base }) => (
+  <div>
+    <h1>{name.english}</h1>
+    <table>
+      <tbody>
+        <tr key={type}>
+          <td>Type: {type.join(', ')}</td>
+        </tr>
+        {Object.keys(base).map((key) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{base[key]}</td>
+          </tr>
+        )
+        )}
+      </tbody>
+    </table>
+  </div>
+);
+
+PokemonInfo.propTypes = {
+  name: PropTypes.shape({
+    english: PropTypes.string.isRequired,
+    japanese: PropTypes.string.isRequired,
+    chinese: PropTypes.string.isRequired,
+    french: PropTypes.string.isRequired,
+  }),
+  base: PropTypes.shape({
+    HP: PropTypes.number.isRequired,
+    Attack: PropTypes.number.isRequired,
+    Defense: PropTypes.number.isRequired,
+    "Sp. Attack": PropTypes.number.isRequired,
+    "Sp. Defense": PropTypes.number.isRequired,
+    Speed: PropTypes.number.isRequired,
+
+  })
+}
 
 function App() {
   const [filter, filterSet] = useState("");
@@ -62,11 +100,7 @@ function App() {
             ))}
           </tbody>
         </table>
-        {selectedItem && (
-          <div>
-            <h1>{selectedItem.name.english}</h1>
-          </div>
-        )}
+        {selectedItem && ( <PokemonInfo {...selectedItem} /> )}
       </div>
     </div>
   );
